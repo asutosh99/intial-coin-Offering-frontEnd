@@ -109,22 +109,25 @@ export default function Home() {
 
   const mintCryptoDevToken = async (amount) => {
     try {
-      const signer = await getProviderOrSigner();
+      const signer = await getProviderOrSigner(true);
 
       const tokenContract = new Contract(
         TOKEN_CONTRACT_ADDRESS,
         TOKEN_CONTRACT_ABI,
         signer
       );
-      value = amount * 0.001;
+     const value = amount * 0.001;
 
-      const tx = tokenContract.mint(amount, {
+      const tx =await tokenContract.mint(amount, {
         value: utils.parseEther(value.toString()),
       });
       setLoading(true);
       // wait for the transaction to get mined
+      
       await tx.wait();
+      console.log("before false");
       setLoading(false);
+      console.log("after false");
       window.alert("Successfully minted Crypto Dev Tokens");
       await getBalanceOfCryptoDevTokens();
       await getTotalTokensMinted();
